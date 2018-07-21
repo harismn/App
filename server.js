@@ -13,12 +13,10 @@ var con = mysql.createConnection({
     database: 'rs_users'
 });
 
-var server = app.listen(3000, () => {
-    var host = server.address().address
-    var port = server.address().port
-
-    console.log('server start');
-});
+const server = app.listen(3000, () => {
+    const { address, port } = server.address();
+    console.log(`Listening at http://${address}:${port}`);
+  });
 
 
 

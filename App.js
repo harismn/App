@@ -22,7 +22,7 @@ export default class App extends Component {
   }
 
   getButton = () => {
-    fetch('http://10.1.1.1:3000/users',{
+    fetch('http://192.168.8.101:3000/users',{
       method: 'GET'
     }).then((responseData) => {
       return responseData.json();
