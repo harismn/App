@@ -34,3 +34,13 @@ app.get('/users',function(req, res) {
         }
     })
 })
+
+app.post('/users', function(req, res){
+    con.query('SELECT * FROM users', req.body, function(error, rows, fields){
+        if(!!error)console.log('error');
+        else {
+            console.log(rows);
+            res.send(JSON.stringify(rows));
+        }
+    })
+})

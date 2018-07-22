@@ -7,13 +7,22 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, TouchableHighlight} from 'react-native';
+import {
+  Platform, 
+  StyleSheet, 
+  Text, 
+  View, 
+  TextInput, 
+  TouchableHighlight,
+  ScrollView
+} from 'react-native';
 
 export default class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      apiData: []
+      apiData: [],
+      naData: []
     }
     this.dataId = null;
     this.name = null;
@@ -22,16 +31,38 @@ export default class App extends Component {
   }
 
   getButton = () => {
-    fetch('http://192.168.8.101:3000/users',{
+    fetch('http://192.168.8.100:3000/users',{
       method: 'GET'
     }).then((responseData) => {
       return responseData.json();
     }).then((jsonData) => {
-      console.log(jsonData);
+      // console.log(jsonData);
       this.setState({apiData: jsonData})
       console.log(this.state.apiData)
     }).done();
     this.dataId = null;
+  }
+
+  saveButton = () => {
+    let bee = { name: this.name, email: this.email, phone_number: this.phone_number}
+    fetch('http://192.168.8.100:3000/users',{
+      method: 'POST',
+      headers: {
+        'Accept':'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bee),
+    }).then((responseData) => {
+      return responseData.json();
+    }).then((jsonData) => {
+      // console.log(jsonData);
+      this.setState({naData: jsonData})
+      console.log(this.state.naData)
+    }).done();
+    this.dataId = null;
+    this.name = null;
+    this.email = null;
+    this.phone_number = null;
   }
 
 
@@ -41,9 +72,10 @@ export default class App extends Component {
         return (
           <View key={jsonData.id}>
               <View style={{flexDirection: 'row'}}>
-                <Text style= {{color: '#000'}}>
-                  {jsonData.id}
-                </Text>
+                <Text style= {{color: '#511099'}}> {jsonData.id} | </Text>
+                <Text style= {{color: '#FF5722'}}> {jsonData.name} | </Text>
+                <Text style= {{color: '#511099'}}> {jsonData.email} | </Text>
+                <Text style= {{color: '#FF5722'}}> {jsonData.phone_number} | </Text>
               </View>
           </View>
         )
@@ -80,6 +112,14 @@ export default class App extends Component {
         <TouchableHighlight style = {styles.button} onPress = {this.getButton}>
             <Text style = {styles.texthiglight}> view data </Text>
         </TouchableHighlight>
+
+        <TouchableHighlight style = {styles.button} onPress = {this.saveButton}>
+            <Text style = {styles.texthiglight}> Save </Text>
+        </TouchableHighlight>
+
+        <ScrollView contentContainerStyle={styles.container}>
+          {dataDisplay}
+        </ScrollView>
       </View>
     );
   }
